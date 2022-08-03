@@ -1,0 +1,94 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <partial name="Widgets/_Header"/>
+</head>
+<body>
+<div id="q-app">
+    <q-layout view="lhh LpR lff" class="bg-grey-1">
+        <q-header reveal class="bg-primary q-py-xs" style="height: 65px;line-height: 65px;">
+            <q-toolbar class="fit">
+                <img src="~/images/logo.png" alt="SiteContext.Config.SiteName" class="full-height"/>
+                <q-toolbar-title class="desktop-only">
+                    @SiteContext.Config.SiteName
+                </q-toolbar-title>
+            </q-toolbar>
+        </q-header>
+        <q-page-container>
+            <q-page :class="$q.platform.is.desktop?'q-pa-xl':'q-pa-md'">
+                <div class="q-mx-auto row justify-center" style="margin-top: 4rem;">
+                    <div class="col-xs-12 col-md-5">
+                        <div class="bg-grey-4 q-pa-md flex-center q-gutter-y-lg">
+                            <div class="text-primary text-center  text-h4 text-weight-bolder q-mb-xl">Admin Login</div>
+                            <q-input outlined v-model.trim="loginForm.account" label="Account" label-color="primary" bg-color="white">
+                                <template v-slot:prepend>
+                                    <q-icon name="person" size="lg" ></q-icon>
+                                </template>
+                            </q-input>
+                            <q-input outlined v-model="loginForm.password" label="Password" label-color="primary" bg-color="white"
+                                     :type="loginForm.passwordShow?'text':'password'">
+                                <template v-slot:prepend>
+                                    <q-icon name="lock" size="lg" ></q-icon>
+                                </template>
+                                <template v-if="loginForm.password" v-slot:append>
+                                    <q-icon :name="loginForm.passwordShow?'visibility':'visibility_off'" size="lg"
+                                            @@click="loginForm.passwordShow=!loginForm.passwordShow" ></q-icon>
+                                </template>
+                            </q-input>
+                            <q-btn :loading="btnLoginLoading" color="primary" size="lg" class="full-width" @@click="login" ><q-icon name="fas fa-paper-plane" size="md" class="on-left"></q-icon>Login</q-btn>
+                        </div>
+                    </div>
+                </div>
+            </q-page>
+        </q-page-container>
+    </q-layout>
+</div>
+<partial name="Widgets/_BodyEnd"/>
+<script>
+      new Vue({
+        el: '#q-app',
+        data:  {
+          loginForm:{
+              account:'',
+              password:'',
+              passwordShow:false,
+          },
+          btnLoginLoading:false,
+        },
+        methods: {
+            login (){
+                if (this.loginForm.account && this.loginForm.password){
+                    this.btnLoginLoading = true;
+                    AdminApi('login', {
+                        account: this.loginForm.account,
+                        password: this.loginForm.password
+                    },true)
+                    .then((response)=> {
+                        if (response.data.code === 1){
+                            Store.Token(response.headers.admintoken);
+                            Store.Admin(response.data.data);
+                            location.href = '@Url.ActionLink("index", "admin")';
+                        }
+                        else{
+                            Notify.Warning('account password mismatch');
+                        }
+                        this.btnLoginLoading = false;
+                    })
+                    .catch( (error)=> {
+                        Notify.Warning('api connection error');
+                        console.error(error);
+                        this.btnLoginLoading = false;
+                    });
+                }else{
+                    Notify.Warning('please enter your account number & password');
+                }
+            }
+        },
+        // ...etc
+      })
+</script>
+</body>
+</html>

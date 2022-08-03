@@ -1,0 +1,289 @@
+﻿<q-page padding>
+    <div class="text-h5 text-weight-bold text-grey-8">
+        <q-icon :name="productlinks[0].icon" size="md" class="on-left"></q-icon>{{productlinks[0].text}}
+    </div>
+    <q-separator class="q-my-sm"></q-separator>
+    <div class="row q-gutter-y-sm justify-between">
+        <q-toolbar class="col-xs-12 col-md-auto">
+            <q-select outlined dense options-dense stack-label bg-color="white"
+                    style="min-width: 180px"
+                    label="Display"
+                    v-model="productFilter.isShow"
+                    emit-value
+                    map-options
+                    :options="productFilter.isShowOptions">
+            </q-select>
+            <q-input outlined dense stack-label bg-color="white"
+                     clearable
+                     class="on-right"
+                     label="Keyword"
+                     v-model.trim="productFilter.keyword">
+                <template v-slot:prepend>
+                    <q-icon name="fas fa-filter" color="primary" size="xs"/>
+                </template>
+            </q-input>
+        </q-toolbar>
+    </div>
+    <q-list animated class="q-gutter-md q-mt-none" :class="$q.platform.is.desktop?'row':''">
+        <q-card class="col-auto" bordered v-for="(item,i) in productListByFilter()">
+            <q-item class="q-pa-xs" style="height:3rem;">
+                <q-item-section >
+                    <q-item-label class="text-subtitle1" :lines="1">
+                        {{item.name}}
+                    </q-item-label>
+                </q-item-section>
+                <q-separator vertical class="q-mx-sm"></q-separator>
+                <q-icon class="col-auto" name="fas fa-dollar-sign" size="lg" color="primary"></q-icon>
+                <q-item-section side>
+                    <div class="col-4">
+                        <q-badge class="float-right" color="accent">
+                            {{parseFloat(item.cost).toFixed(2)}}
+                        </q-badge>
+                    </div>
+                    <q-item-label class="col-8">
+                        <label class="text-h6 text-primary">{{parseInt(item.price)}}</label>
+                        <label class="text-caption text-italic text-grey-8">.{{parseFloat(item.price).toFixed(2).split('.')[1]}}</label>
+                    </q-item-label>
+                </q-item-section>
+            </q-item>
+            <q-separator ></q-separator>
+            <q-card-section style="height: 4.7rem;width: 18rem;">
+                <label class="ellipsis-2-lines" v-html="item.memo"></label>
+            </q-card-section>
+            <q-icon class="cursor-pointer absolute-bottom-right q-ma-xs" color="primary" size="1.4rem" name="zoom_out_map" @@click="productDialogShow(i)"></q-icon>
+        </q-card>
+        <q-card class="col-auto" style="min-width: 18rem;height: 8rem" bordered >
+            <q-icon class="cursor-pointer absolute-center" name="add" size="xl" color="primary" @@click="productDialogShow(-1)"></q-icon>
+        </q-card>
+    </q-list>
+</q-page>
+
+<q-dialog v-model="productDialog">
+    <q-card style="max-width: 500px; width: 500px;">
+        <q-card-section class="row items-center q-pb-none">
+            <div class="text-h6">Product Detail</div>
+            <q-space ></q-space>
+            <q-btn icon="close" flat round dense v-close-popup></q-btn>
+        </q-card-section>
+        <q-card-section class="q-gutter-sm">
+            <q-input outlined dense stack-label bg-color="white"
+                     class="col"
+                     label="Product Name"
+                     v-model.trim="productCurrent.name"
+                     ref="productCurrent_name"
+                     :rules="[val => !!val || 'product name cannot be empty',val => val.length <= 10 || 'The length of the product name is limited to 10 digits']">
+            </q-input>
+            <div class="row">
+                <div class="col column on-left">
+                  <q-input outlined dense stack-label bg-color="white"
+                           class="col"
+                           label="Price"
+                           v-model.number="productCurrent.price"
+                           ref="productCurrent_price"
+                           :rules="[val => !!val || 'price cannot be empty']">
+                  </q-input>
+                  <q-input outlined dense stack-label bg-color="white"
+                           class="col"
+                           label="Cost"
+                           v-model.number="productCurrent.cost"
+                           ref="productCurrent_cost"
+                           :rules="[val => !!val || 'cost cannot be empty']">
+                  </q-input>
+                    <q-space class="col-auto q-my-xs"></q-space>
+                    <div class="col-shrink">
+                        <q-toggle v-model="productCurrent.isShow" color="primary" :label="productIsShowOptions[1].name" left-label></q-toggle>
+                    </div>   
+                </div>
+             
+                <div class="col-shrink on-right">
+                     <q-img basic style="border:1px solid grey;border-radius: 0.8rem; height: 10rem; width: 10rem"
+                           class="cursor-pointer"
+                           :src="productCurrent.icon"
+                           spinner-color="white"
+                           @@click="$refs.product_icon_pick.click()">
+
+                        <q-icon class="absolute-top-right" color="orange-9" name="backup" size="sm"></q-icon>
+                        <template v-slot:error>
+                            <div class="absolute-full flex flex-center bg-grey-2 text-primary">
+                                No picture
+                                <q-icon class="absolute-top-right" color="orange-9" name="backup" size="sm"></q-icon>
+                            </div>
+                        </template>
+                    </q-img>
+                    <input class="hidden" type="file" accept="image/*" ref="product_icon_pick" @@change="productIconUpload">
+                </div>
+            </div>
+            <q-editor v-model="productCurrent.memo" min-height="5rem" dense
+                      placeholder="Product Memo"
+                      :toolbar="editorToolbar"
+                      :fonts="editorFonts">
+            </q-editor>
+        </q-card-section>
+        <q-card-section class="row justify-between">
+            <q-btn color="negative" icon="delete_forever" label="Remove" @@click="productDialogRemove" v-if="productIndex >= 0"></q-btn>
+            <q-space></q-space>
+            <q-btn color="warning" :icon="productIndex >= 0 ? 'edit' : 'add'" :label="productIndex >= 0 ? 'Edit' : 'Add'" @@click="productDialogEdit"></q-btn>
+        </q-card-section>
+    </q-card>
+</q-dialog>
+
+@section Scripts{
+    <script>
+   var _page = {
+       data:{
+           productData:[],
+           productFilter:{
+               keyword:'',
+               isShow:'',
+               isShowOptions:[],
+           },
+           productCurrent:{},
+           productIndex:-2,//默认 -2 新增 -1 其他 索引值
+           productDialog:false,
+       },
+       beforeMount(){
+           AdminApi("ProductList",{},true)
+              .then((response)=> {
+                  if (response.data.code === 1){ 
+                      this.productData = response.data.data;
+                      this.productFilterReset();
+                  } else{
+                      Notify.Warning('Product data loading failure');
+                  }
+              })
+              .catch( (error)=> {
+                  Notify.Warning('api connection error');
+                  console.error(error);
+              });
+       },
+       computed:{
+       },
+       methods: {
+           productIconUpload(){
+               if (arguments.length === 1 && arguments[0].target && arguments[0].target.files && arguments[0].target.files.length === 1){                   
+                  var file = arguments[0].target.files[0];                   
+                  AdminApi("UploadFormFile",{model:'Product',name:'icon', id: this.productCurrent.id,file},true)
+                      .then((response)=> {
+                            if (response.data.code === 1){                
+                                this.productCurrent.icon = response.data.data;
+                            }
+                            else if(response.data.code === 0){
+                             Notify.Warning('No files have been uploaded');
+                          }else if(response.data.code === 15){
+                             Notify.Warning('Upload parameter error');
+                          }else {
+                             Notify.Warning('Unknown error');
+                          }
+                          this.$refs.product_icon_pick.value = '';
+                        })
+                        .catch( (error)=> {
+                            Notify.Warning('api connection error');
+                            console.error(error);
+                          this.$refs.product_icon_pick.value = '';
+                        });
+             }
+           },
+           productFilterReset(){
+               this.productFilter.keyword='';   
+               this.productFilter.isShow='';               
+               this.productFilter.isShowOptions = [];               
+               this.productFilter.isShowOptions.push({label:"All*",value:''});               
+               this.productFilter.isShowOptions.push({label:this.productIsShowOptions[0].name,value:false});
+               this.productFilter.isShowOptions.push({label:this.productIsShowOptions[1].name,value:true});
+               
+           },
+           productDialogShow(i){
+               this.productDialog=true;
+               this.productIndex =i;
+               if (i>=0){
+                   this.productCurrent= JSON.parse(JSON.stringify(this.productData[i]));
+               }else{
+                   this.productCurrent = {cost: 0,price: 0,name:'',memo:'', isShow:true};
+               }
+           },
+           productDialogEdit(){
+               if (this.productCurrent.memo.length > 4000){
+                   Notify.Warning('The product memo is too long');
+                   return;
+               }
+               this.$refs.productCurrent_name.validate();
+               this.$refs.productCurrent_price.validate();
+               this.$refs.productCurrent_cost.validate();
+               if (!this.$refs.productCurrent_name.hasError && !this.$refs.productCurrent_cost.hasError && !this.$refs.productCurrent_price.hasError){
+                   if (this.productIndex >= 0 ){
+                       var index = 0;
+                       for (i in this.productData){
+                           if (index === this.productIndex){
+                               this.$set(this.productData, i, JSON.parse(JSON.stringify(this.productCurrent)))
+                               break;
+                           }
+                           index++;
+                       }
+                   }else if (this.productIndex === -1){
+                       this.$set(this.productData, this.productData.length, JSON.parse(JSON.stringify(this.productCurrent)))
+                   }
+                   this.productListAutoSave();
+                   this.productIndex = -2;
+                   this.productDialog=false;
+                   this.productCurrent = {};
+               }
+           },
+           productDialogRemove(){
+               this.$q.dialog({
+                title: 'Re-confirm',
+                message: 'Identify the items to be removed with the name ['+this.productCurrent.name+'] ?',
+                cancel: true,
+                persistent: true
+              }).onOk(() => {
+                if (this.productIndex !== -2){
+                      var index = 0;
+                      for (i in this.productData){                            
+                          if (index === this.productIndex){
+                              this.productData.splice(i,1);
+                              break;
+                          }
+                          index++;
+                      }
+                      this.productListAutoSave();
+                  }
+                  this.productIndex = -2;
+                  this.productDialog=false;
+                  this.productCurrent = {};
+              })
+           },
+           productListByFilter(){
+               return _.filter(this.productData,(data)=>{
+                   var res = true;
+                   if (this.productFilter.isShow === true || this.productFilter.isShow === false){
+                        res = res && data.isShow === this.productFilter.isShow ;
+                   }
+                   var keyword = ''
+                   if (this.productFilter.keyword)
+                       keyword = this.productFilter.keyword.trim().toLowerCase();
+                   if (keyword){
+                       res = res && (data.name.toLowerCase().indexOf(keyword) > -1 || data.memo.toLowerCase().indexOf(keyword) > -1)
+                   }
+                   return res;
+               });
+           },
+           productListAutoSave(){
+               AdminApi("ProductListSave", this.productData)
+                  .then((response)=> {
+                      if (response.data.code === 1){ 
+                          this.productData = response.data.data;
+                          this.productFilterReset();
+                      } else{
+                          //Notify.Warning('保存失败，数据格式错误');
+                      }
+                  })
+                  .catch( (error)=> {
+                      Notify.Warning('api connection error');
+                      console.error(error);
+                  });
+           }
+       }
+   };
+   DeepMerge(_layout,_page);
+   new Vue(_layout);
+    </script>
+}

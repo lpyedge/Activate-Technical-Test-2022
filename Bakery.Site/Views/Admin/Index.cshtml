@@ -1,0 +1,174 @@
+﻿<q-page padding>
+    <div class="text-h5 text-weight-bold text-grey-8">
+        <q-icon :name="adminlinks[0].icon" size="md" class="on-left"></q-icon>{{adminlinks[0].text}}
+    </div>
+    
+    <q-separator class="q-my-sm"></q-separator>
+    
+    <q-tabs 
+        class="text-grey-8"
+        active-color="primary"
+        indicator-color="primary"
+        content-class="text-h5"
+        dense
+        align="left"
+        narrow-indicator
+        inline-label
+        v-model="tab">
+        <q-tab name="basic" icon="info_outline" label="Basic settings" ></q-tab>
+        <q-tab name="payment" icon="fas fa-hand-holding-usd" label="Other settings" ></q-tab>
+    </q-tabs>
+    <q-separator class="q-my-sm"></q-separator>
+    <q-tab-panels v-model="tab" animated>
+        <q-tab-panel class="q-pa-none" name="basic">
+            <q-form class="q-gutter-md">
+                <div class="row">
+                    <div class="col column on-left">
+                           <q-input outlined dense stack-label bg-color="white"
+                                                 label="Site Name"
+                                                 v-model.trim="config.siteName"
+                                                 ref="config_siteName"
+                                                 :rules="[val => !!val || 'site name cannot be empty']">
+                                        </q-input>
+                        
+                                        <q-select outlined dense options-dense stack-label bg-color="white"
+                                                  class="col"
+                                                  label="Site Template"
+                                                  v-model="config.siteTemplate"
+                                                  emit-value
+                                                  map-options
+                                                  :options="siteTemplates">
+                                        </q-select>
+                        
+                                        <q-input outlined dense stack-label bg-color="white"
+                                                 label="Service Email"
+                                                 v-model.trim="config.serviceEmail">
+                                        </q-input>
+                    </div>
+                    <div class="col-shrink on-right">
+                        <q-img basic style="border:1px solid grey;border-radius: 0.8rem; height: 10rem; width: 10rem"
+                               class="cursor-pointer"
+                               :src="config.siteLogo"
+                               spinner-color="white"
+                               @@click="$refs.site_logo_pick.click()">
+
+                            <q-icon class="absolute-top-right" color="orange-9" name="backup" size="sm"></q-icon>
+                            <template v-slot:error>
+                                <div class="absolute-full flex flex-center bg-grey-2 text-primary">
+                                    No picture
+                                    <q-icon class="absolute-top-right" color="orange-9" name="backup" size="sm"></q-icon>
+                                </div>
+                            </template>
+                        </q-img>
+                        <input class="hidden" type="file" accept="image/*" ref="site_logo_pick" @@change="siteLogoUpload">
+                    </div>
+                </div>
+
+                <q-input outlined dense stack-label bg-color="white"
+                         label="Site Introduction"
+                         v-model.trim="config.siteMemo"
+                         ref="config_siteMemo"
+                         type="textarea"
+                         :rules="[val => !!val || 'site introduction cannot be empty']">
+                </q-input>
+
+                <q-btn :loading="btnSaveLoading" class="float-right" color="primary" icon="save" label="Save" @@click="configBasicSave"></q-btn>
+            </q-form>
+        </q-tab-panel>
+
+        <q-tab-panel class="q-pa-none" name="payment">
+            <div class="text-h6">TODO</div>
+            Developing !!!
+        </q-tab-panel>
+        
+    </q-tab-panels>
+    
+</q-page>
+
+@section Scripts{
+    <script>
+   var _page = {
+       data:{
+           tab:'basic',
+           configOrgin:{
+               
+           },
+           config:{
+           },
+           siteTemplates: @Json.Serialize(Global.EnumsOptions<ESiteTemplate>()),
+           btnSaveLoading:false
+       },
+       beforeMount(){
+           AdminApi("ConfigLoad")
+             .then(response=>{
+                 if (response.data.code === 1){
+                   this.configSet(response.data.data);
+                 }
+             })
+             .catch(error =>{
+                 Notify.Warning('api connection error');
+                 console.error(error);
+             });
+       },
+       methods: {
+           configSet(config){               
+               this.configOrgin = config;            
+               this.config = JSON.parse(JSON.stringify(config)) ;
+           },           
+           configBasicSave(){
+               this.$refs.config_siteName.validate();
+               this.$refs.config_siteMemo.validate();
+               
+               if (!this.$refs.config_siteName.hasError && !this.$refs.config_siteMemo.hasError){
+                   this.btnSaveLoading = true;
+                  this.configOrgin.siteName = this.config.siteName;
+                  this.configOrgin.siteMemo= this.config.siteMemo;
+                  this.configOrgin.siteLogo = this.config.siteLogo;
+                  this.configOrgin.siteTemplate = this.config.siteTemplate;
+                  this.configOrgin.serviceEmail = this.config.serviceEmail;
+                  AdminApi("ConfigSave",this.configOrgin)
+                     .then((response)=> {
+                         if (response.data.code === 1){                
+                             Notify.Info('save successful');
+                             this.configSet(response.data.data);
+                         }
+                         this.btnSaveLoading = false;
+                     })
+                     .catch( (error)=> {
+                         Notify.Warning('api connection error');
+                         console.error(error);
+                         this.btnSaveLoading = false;
+                     });
+               }
+           },
+           siteLogoUpload(){
+              if (arguments.length === 1 && arguments[0].target && arguments[0].target.files && arguments[0].target.files.length === 1){                   
+                   var file = arguments[0].target.files[0];                   
+                   AdminApi("UploadFormFile",{model:'Site',name:'Logo', id:'0',file},true)
+                       .then((response)=> {
+                             if (response.data.code === 1){                
+                                 this.config.siteLogo = response.data.data;
+                             }
+                             else if(response.data.code === 0){
+                              Notify.Warning('No files have been uploaded');
+                           }else if(response.data.code === 15){
+                              Notify.Warning('Upload parameter error');
+                           }else {
+                              Notify.Warning('Unknown error');
+                           }
+                           this.$refs.site_logo_pick.value = '';
+                         })
+                         .catch( (error)=> {
+                             Notify.Warning('api connection error');
+                             console.error(error);
+                           this.$refs.site_logo_pick.value = '';
+                         });
+              }
+          }
+       }
+   };
+   DeepMerge(_layout,_page);
+   
+   new Vue(_layout);
+    </script>
+}

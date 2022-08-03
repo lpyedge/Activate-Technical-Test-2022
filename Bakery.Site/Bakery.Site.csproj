@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RazorCompileOnBuild>false</RazorCompileOnBuild>
+    <RazorCompileOnPublish>false</RazorCompileOnPublish>
+    <UserSecretsId>8a29c354-bdd2-40ea-9091-85b8345443b3</UserSecretsId>
+    <LangVersion>default</LangVersion>
+    <Nullable>warnings</Nullable>
+    <RootNamespace>Bakery.Site</RootNamespace>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  
+</PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.4" />
+    <PackageReference Include="RazorEngineCore" Version="2022.1.2" />
+    <PackageReference Include="SqlSugarCore" Version="5.1.0" />
+  </ItemGroup>
+
+
+</Project>

@@ -1,0 +1,377 @@
+﻿@charset "utf-8";
+/* Basic Style Begin */
+* {padding: 0; margin: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent}
+*:focus {outline: none}
+h1,h2,h3,h4,h5,h6 {font-weight: normal}
+ul,li,i,em {list-style-type: none; font-style: normal}
+img {border: 0px; padding: 0; margin: 0}
+input,select,textarea {font-size: 14px; color: #666; font-family: "Verdana","Tahoma","Microsoft Yahei"}
+p {display: block; margin-block-start: 0; margin-block-end: 1em; margin-inline-start: 0; margin-inline-end: 1px}
+
+html,body {width: 100%; height: 100%; position: relative}
+body {font-size: 14px; color: #333; font-family: "Verdana","Tahoma","Microsoft Yahei"; transition: all .3s}
+a {font-size: 14px; color: #333; text-decoration: none; vertical-align: baseline; cursor: pointer; transition: all .3s}
+a:visited , a:active {color: #333}
+
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {color: #b5b5b5}
+input:-moz-placeholder, textarea:-moz-placeholder {color: #b5b5b5}
+input::-moz-placeholder, textarea::-moz-placeholder {color: #b5b5b5}
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {color: #b5b5b5}
+
+::after,::before {-webkit-box-sizing: border-box; box-sizing: border-box}
+::-webkit-scrollbar {width: 10px; background: transparent; border-radius: 100px}
+::-webkit-scrollbar:hover {background: rgba(0,0,0,.07)}
+::-webkit-scrollbar:horizontal {height: 0}
+::-webkit-scrollbar-thumb:vertical {background: rgba(0,0,0,.3); border-radius: 100px}
+::-webkit-scrollbar-thumb:active {background: rgba(0,0,0,.5); border-radius: 100px}
+
+.clear {clear: both}
+.fixed {position: fixed}
+.relative {position: relative}
+.absolute {position: absolute}
+.overflow-hidden {overflow: hidden}
+.margin-none {margin: 0!important}
+.padding-none {padding: 0!important}
+.fill {width: 100%; height: 100%}
+.full-width {width: 100%}
+.full-height {height: 100%}
+.display-block {display: block}
+.display-none {display: none}
+.italic {font-style: italic}
+
+/*禁用IE输入框的X删除*/
+input::-ms-clear {
+    display: none;
+}
+/*页面作为iframe的子页面显示时隐藏横向滚动条*/
+html {
+    overflow-x: hidden;
+}
+/* 移除 input type="number" 时浏览器自带的上下箭头？ */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/*字号*/
+.size-12 {font-size: 0.32rem!important}
+.size-14 {font-size: 0.37rem!important}
+.size-16 {font-size: 0.43rem!important}
+.size-18 {font-size: 0.48rem!important}
+.size-20 {font-size: 0.53rem!important}
+.size-22 {font-size: 0.59rem!important}
+.size-24 {font-size: 0.64rem!important}
+.size-26 {font-size: 0.69rem!important}
+.font-bold {font-weight: bold}
+.font-normal {font-weight: normal}
+
+/*字色*/
+.txt-white {color: #fff!important}
+.txt-red {color: #ef0000!important}
+.txt-black {color: #666!important}
+.txt-blue {color: #409eff!important}
+.txt-green {color: #67c23a!important}
+.txt-gray {color: #ddd!important}
+
+/*字体*/
+.font-family-T {font-style: oblique}
+
+/*背景色*/
+.bg-white {background: #fff!important}
+.bg-red {background: #ef0000!important; border: 0!important}
+.bg-black {background: #666!important; border: 0!important}
+.bg-blue {background: #409eff!important; border: 0!important}
+.bg-green {background: #67c23a!important; border: 0!important}
+
+/*仿 Quasar Flex 布局*/
+.row, .column, .flex {display: flex; flex-wrap: wrap}
+.column {flex-direction: column}
+.col, .col-auto {width: auto; min-width: 0; max-width: 100%}
+.col-auto {flex: 0 0 auto}/*使单元格只填充需要渲染的空间*/
+.col {flex: 10000 1 0%}/*试图填充所有可用的空间，同时如果需要也可以缩小*/
+
+/*具体见 https://www.runoob.com/w3cnote/flex-grammar.html */
+.flex-start {justify-content: flex-start}
+.flex-end {justify-content: flex-end}
+.flex-center {justify-content: center}
+.flex-between {justify-content: space-between}
+.flex-around {justify-content: space-around}
+
+.items-start {align-items: flex-start}
+.items-end {align-items: flex-end}
+.items-center {align-items: center}
+.items-baseline {align-items: baseline}
+.items-stretch {align-items: stretch}
+
+.aline-start {align-content: flex-start}
+.aline-end {align-content: flex-end}
+.aline-center {align-content: center}
+.aline-between {align-content: space-between}
+.aline-around {align-content: space-around}
+.aline-stretch {align-content: stretch}
+
+/*页面进入缓冲*/
+body {animation: fadeIn .7s}
+@keyframes fadeIn {
+    0% {opacity: 0}
+    to {opacity: 1;}
+}
+@-webkit-keyframes fadeIn {
+    0% {opacity: 0}
+    to {opacity: 1;}
+}
+
+.fadeIn-up {animation: fadeIn-up .3s}
+.fadeOut-up {animation: fadeOut-up .3s}
+@keyframes fadeIn-up {
+    0% {transform: translate3d(0,-20px,0); opacity:0}
+    to {transform: translateZ(0); opacity:1}
+}
+@keyframes fadeOut-up {
+    0% {transform: translateZ(0); opacity:1}
+    to {transform: translate3d(0,-20px,0); opacity:0}
+}
+
+.fadeIn-down {animation: fadeIn-down .3s}
+.fadeOut-down {animation: fadeOut-down .3s}
+@keyframes fadeIn-down {
+    0% {transform:translate3d(0,20px,0); opacity:0}
+    to {transform:translateZ(0); opacity:1}
+}
+@keyframes fadeOut-down {
+    0%{transform:translateZ(0); opacity:1}
+    to{transform:translate3d(0,20px,0); opacity:0}
+}
+
+.fadeIn-left {animation: fadeIn-left .3s}
+.fadeOut-left {animation: fadeOut-left .3s}
+@keyframes fadeIn-left {
+    0% {transform: translate3d(20px,0,0); opacity:0}
+    to {transform: translateZ(0); opacity:1}
+}
+@keyframes fadeOut-left {
+    0% {transform:translateZ(0); opacity:1}
+    to {transform:translate3d(20px,0,0); opacity:0}
+}
+
+.fadeIn-right {animation: fadeIn-right .3s}
+.fadeOut-right {animation: fadeOut-right .3s}
+@keyframes fadeIn-right {
+    0% {transform:translate3d(-20px,0,0); opacity:0}
+    to {transform:translateZ(0); opacity:1}
+}
+@keyframes fadeOut-right {
+    0%{transform:translateZ(0); opacity:1}
+    to{transform:translate3d(-20px,0,0); opacity:0}
+}
+/* Basic Style End */
+
+
+/* font awsome 图标大小 */
+.fa, .fas {font-size: 0.6rem!important;}
+
+/* CSS Document */
+html{font-size:62.5%;height:100%}
+body{position:relative;max-width:10rem;margin:0 auto !important;min-height:100%;display:block;}
+body,input,select,textarea,a {font-size: 0.4rem; }
+
+/* 全局:select父容器定义样式 */
+.select{font-family: "Font Awesome 5 Free"; font-size: 0.6rem!important;font-weight: 900;-webkit-font-smoothing: antialiased;display: inline-block;font-style: normal; font-variant: normal; text-rendering: auto;
+    line-height: 1;position: relative; padding: 0 0.285rem; border-radius: 0.114rem;border: 0.03rem solid #eee}
+.select select {width: 95%; height: 100%; background: transparent; border: 0;position: relative; left: 0; top: 0; z-index: 2; font-size: 0.426rem; cursor: pointer;}
+/*隐藏select默认的小箭头*/
+.select select {appearance: none; -webkit-appearance: none; -moz-appearance: none;-ms-appearance:none;}
+/*隐藏IE下 select默认的小箭头*/
+.select select::-ms-expand {display: none}
+.select::after {content: "\f107"; font-size: 0.6rem; width: 0.8rem; height: 0.8rem; line-height: 0.8rem; text-align: center; position: absolute; top: 0.2rem; right: 0.1rem; z-index: 1}
+
+/*主框架*/
+#page {width: 100%; height:100%; overflow-y:auto; margin: auto; background: #f5f5f5;}
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*页眉元素*/
+.home-header {width: 100%; max-width: 10rem; height: 1.4rem; padding: 0 0.43rem; font-size: 0.63rem; position: fixed; top: 0;  z-index: 10; transition: all .3s}
+.home-header {background-image: linear-gradient(135deg, #42189f, #a23078, #ee2e3d)}
+.home-header .nav {width: 1rem; height: 1rem; position: absolute; left: 0.25rem; top: 0.25rem}
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*首页框架*/
+.home-box {width: 100%; height: 100%; background: url(../images/home-bg.jpg) no-repeat center; background-size: cover}
+
+/*首页游戏列表*/
+.stores-hot {width: 100%; height: auto; padding: 1.85rem 0.43rem 0.43rem 0.43rem}
+.stores-hot ul {overflow: hidden}
+.stores-hot ul li {float: left; width: 33.3333%; height: 3.3rem; text-align: center; overflow: hidden; margin-bottom: 0.43rem}
+.stores-hot ul li a {color: #fff}
+.stores-hot ul li img {width: 70%; height: auto; border-radius: 0.43rem}
+.stores-hot ul li span {width: 100%; overflow: hidden; font-size:0.4rem; line-height:0.45rem;height:0.9rem; text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 1; display: block}
+
+/*首页更多*/
+.home-more {width: 100%; max-width: 10rem ; padding: 0 0.43rem; height: 1.4rem; line-height: 1.4rem; text-align: center; position: absolute; bottom: 0.86rem}
+.home-more a {color: #333; font-size: 0.46rem; font-weight: bold; border-radius: 0.11rem; background: #fc0; display: block}
+
+/*首页关于我们*/
+.company {width: 100%; height: auto; color: #fff; padding: 0 0.86rem 3.5rem;}
+.company .more {padding: 0.2rem; color: #fff; cursor: pointer; display: block;font-size:0.4rem}
+.company .titile-EN {font-size: 0.63rem; font-style: italic; font-weight: bold}
+.company .titile-CN {font-size: 0.63rem; font-style:oblique;}
+.company .content {font-size: 0.46rem; line-height: 0.63rem; margin-top: 0.285rem}
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*游戏列表*/
+.stores-nav {width: 100%; overflow: hidden; position: relative; margin-top: 1.4rem; padding-right: 0.95rem}
+.stores-nav ul {overflow: hidden; padding: 0.43rem 0; border-bottom: 0.0285rem solid #eee; position: relative}
+.stores-nav ul::before {content: ""; width: 0; height: 0; position: absolute; top: 0; left: 0; z-index: 0; border-top: 0.57rem solid #f5f5f5; border-bottom: 0.57rem solid transparent; border-left: 0.57rem solid #f5f5f5; border-right: 0.57rem solid transparent;}
+.stores-nav ul .letter-title {width: 0.86rem; height: 0.86rem; line-height: 0.86rem; text-align: center; font-style:oblique; font-size: 0.66rem; display: block; position: absolute; left: 0; top: 0}
+.stores-nav ul li {float: left; width: calc((100% - 0.43rem) / 3); height: auto; text-align: center; overflow: hidden; padding: 0.43rem 0 0.43rem 0.43rem}
+.stores-nav ul li img {width: 70%; height: auto; border-radius: 0.43rem}
+.stores-nav ul li span {width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; -webkit-box-orient: vertical; -webkit-line-clamp: 1; display: block}
+
+/*字母按钮*/
+.letter-nav {width: 0.95rem; height: calc(100% - 1.4rem); text-align: center; background: #f2f2f2; position: absolute; top: 0; right: 0; margin-top: 1.4rem; z-index: 8}
+.letter-nav a {width: 100%; height: 2.7%; font-size: 0.36rem; color: #999; display: flex; align-items: center; justify-content: center}
+.letter-nav a:nth-child(2n+1) {background: #f6f6f6}
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*店铺页眉*/
+.site-header {width: 100%; height: 4.28rem; padding: 0.14rem 0.43rem; position: relative}/*商城头部总框架*/
+.site-header .site-logo {margin: 0 0.13rem}/*商城头部图标框架*/
+.site-header .site-logo > img {border-radius: 0.42rem; border: 0.06rem solid #fff; background-color: #fff}/*商城头部图标*/
+.site-header .site-text {margin: 0 0.13rem}/*商城头部游文字框架*/
+.site-header .site-name {overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 2; display: -webkit-box}/*商城头部名称*/
+.site-header .site-memo {margin: 0.06rem 0; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; display: -webkit-box}/*商城头部介绍*/
+.site-header .bottom-nav {width: calc(100% - 0.86rem); height: 0.43rem; border-radius: 0.12rem 0.12rem 0 0; position: absolute; left: 0.43rem; bottom: 0}/*商城头部下方定位*/
+.site-header .product-icon {width: 1rem; height: 1rem; position: absolute; right: 0.25rem; top: 0.25rem; display:flex; align-items: center; justify-content: center}
+
+/*当从游戏进入，没有页面页眉时*/
+.site-header.withhome {height: 4.85rem; padding: 1.14rem 0.43rem 0.43rem 0.43rem;}
+.site-header.withhome .home-icon{width: 1rem; height: 1rem; position: absolute; left: 0.25rem; top: 0.25rem; font-weight: bold; display: flex; align-items: center; justify-content: center}
+
+/*商品购买*/
+.site-main {width: calc(100% - 0.86rem); min-height: 65%; margin: 0 0.43rem 1.86rem 0.43rem; padding: 0 0.43rem 0.43rem 0.43rem}
+
+/*商品界面*/
+.site-main .product-box {margin-bottom: 0.43rem}
+.site-main .product-box .product-icon {width: 1.714rem; height: 1.714rem; margin-right: 0.285rem}
+.site-main .product-box .product-icon img {width: 100%; height: 100%; border-radius: 0.285rem}
+.site-main .product-box .product-name {font-size:0.46rem; overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 2; display: -webkit-box}
+.site-main .product-box .inventory {margin: 0.0285rem 0}
+
+/*下单数量*/
+/*.order-quantity {margin-bottom: 0.43rem}*/
+.order-quantity .minus {border: 0.0285rem solid #eee; font-size:0.8rem; background: #f8f8f8;float: left; width: 1.14rem; height: 1.14rem; border-radius: 0 0.086rem 0.086rem 0;cursor:pointer}/*数量减少按钮的边框颜色，背景颜色*/
+.order-quantity .quantity {border: 0;border-top: 0.0285rem solid #eee; border-bottom: 0.0285rem solid #eee; background: #fff;float: left;width: 1.714rem;height: 1.14rem;padding: 0 0.14rem;text-align: center;}/*数量内容的边框颜色，背景颜色*/
+.order-quantity .plus {border: 0.0285rem solid #eee; font-size:0.5rem; background: #f8f8f8;float: left;width: 1.14rem;height: 1.14rem;border-radius: 0 0.086rem 0.086rem 0;cursor:pointer}/*数量增加按钮的边框颜色，背景颜色*/
+
+/*电子信箱*/
+.order-email {width: 100%; height: 1.14rem; margin: 0.43rem 0}
+.order-email input {width: 100%; height: 100%; border-radius: 0.114rem; padding: 0 0.285rem;}
+
+/*商品信息*/
+.product-memo {margin: 0.714rem 0; padding: 0 0.285rem; line-height: 1.5}
+
+/*店铺页脚*/
+.site-footer {width: 100%; max-width: 10rem;height: 1.3rem; position: fixed; bottom: 0}
+.site-footer > input {width: 100%; height: 100%; font-size:0.5rem; background-image: linear-gradient(#ee2e3d, #b8111e); color: #fff; border: 0; cursor: pointer; }
+
+/*侧面栏商品列表*/
+.sideBar-box {width: 100%; height: 100%; position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: flex-end; z-index: 100; transition: all .3s}
+.sideBar-wrapper {width: 100%; height: 100%; }
+.sideBar {width: 8.57rem; height: 100%; overflow: hidden; border-radius: 0.085rem 0 0 0.085rem; box-shadow: -1rem 0rem 1.5rem rgba(0,0,0,.3); position: relative}
+.sideBar > .title {width: 100%; height: 1.43rem; line-height: 1.43rem; text-align: center; font-size: 0.55rem}
+.sideBar > .close {width: 0.55rem; height: 0.55rem; position: absolute; top: 0.5rem; right: 0.3rem; display: block; cursor: pointer}
+.sideBar > .content {width: 100%; height: 100%; padding: 0.43rem; overflow: scroll}
+.sideBar > .content .list {width: 100%; height: auto; padding-bottom: 0.86rem}
+.sideBar > .content .list > div:last-child {border-bottom: 0}
+.sideBar > .content .list > .product-category {width: 100%; height: 1.14rem; line-height: 1.14rem; border-radius: 0.114rem; margin-bottom: 0.457rem;}
+.sideBar > .content .list > .product-box {padding-bottom: 0.43rem}
+.sideBar > .content .list > .product-box .product-icon {width: 1.714rem; height: 1.714rem; margin-right: 0.14rem}
+.sideBar > .content .list > .product-box .product-icon img {width: 100%; height: 100%;}
+.sideBar > .content .list > .product-box .product-name {overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 2; display: -webkit-box}
+.sideBar > .content .list > .product-box .info {margin-top: 0.086rem}
+.sideBar > .content .list > .product-box .info > div {width: 50%}
+.sideBar > .content .list > .current {position: relative}
+.sideBar > .content .list > .current::before {content: ""; width: 0.2rem; height: 0.2rem; border-radius: 100%; position: absolute; top: -0.2rem; left: -0.2rem}
+.sideBar > .content::-webkit-scrollbar {width: 0}
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*透明阴影*/
+.blackmask {width: 100%; height: 100%; background: rgba(0,0,0,.7); display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 999}
+
+/*弹出窗口*/
+.dialog-box {width: 100%; height: 100%; position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; justify-content: flex-end; z-index: 1000; transition: all .3s}
+.dialog-wrapper {width: 100%; height: 100%; display: flex; justify-content: center; align-items: center}
+.dialog {width: calc(100% - 0.86rem); max-height: calc(100% - 0.86rem); overflow: hidden; background: #fff; border-radius: 0.086rem 0.086rem 0 0; box-shadow: 0.0285rem 0.0285rem 0.086rem rgba(0,0,0,.3); position: relative}
+.dialog > .title {width: 100%; height: 1.43rem; line-height: 1.43rem; border-bottom: 0.0285rem solid #eeeeee; text-align: center; font-size: 0.6rem;font-weight: bold;}
+.dialog > .content {width: 100%; height: 100%; font-size: 0.46rem; line-height: 0.685rem; color: #666; padding: 0.43rem; }
+.dialog > .content > p {text-indent: 0.914rem}
+.dialog > .close {width: 0.55rem; height: 0.55rem; position: absolute; top: 0.45rem; right: 0.4rem; display: block; cursor: pointer}
+/*.dialog > .close {width: 18px; height: 18px; position: absolute; top: 0.46rem; right: 0.43rem; display: block; cursor: pointer}
+.dialog > .close::before {content: ""; width: 18px; height: 0.0285rem; background: #666; position: absolute; transform: rotate(45deg); top: 8px; left: 0px}
+.dialog > .close::after {content: ""; width: 18px; height: 0.0285rem; background: #666; position: absolute; transform: rotate(-45deg); top: 8px; left: 0px}*/
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*订单页眉*/
+.order-header {width: 100%; max-width: 10rem; height: 1.33rem; padding: 0 0.43rem; font-size: 0.59rem; position: fixed; top: 0;  z-index: 10; transition: all .3s}
+.order-header .nav {width: 1rem; height: 1rem; position: absolute; left: 0.2rem; top: 0.18rem}
+/*订单容器*/
+.order-box {width: calc(100% - 0.86rem); min-height: 65%; margin: 1.83rem 0.43rem 1.86rem 0.43rem; padding: 0.43rem; background: #fff; overflow: hidden}
+
+/*订单编号及状态*/
+.order-info {width: 100%; height: auto; line-height: 1rem; font-size:  0.43rem; padding-bottom: 0.43rem; margin-bottom: 0.43rem}
+/* .order-info .finish {color: #67c23a}
+.order-info .unfinished {color: #f56c6c} */
+.order-info .btn {border: 0; border-radius: 0.114rem; height: 1.14rem; padding: 0 0.43rem; margin: 0 0.14rem;}
+.order-info .cd-key {height: 1.14rem; line-height: 1.14rem; border-radius: 0.114rem; padding: 0 0.285rem; display: block; margin-top: 0.43rem;}
+.product-memo {margin: 0.714rem 0; padding: 0 0.285rem; line-height: 1.5}
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*商品列表*/
+.product-list {width: 100%; height: auto; overflow: hidden; padding: 0 0.43rem}
+.product-list ul {overflow: hidden;}
+.product-list ul li {width: 100%; height: auto; overflow: hidden; border-radius: 0.13rem; padding: 0.26rem; margin-bottom: 0.43rem;}
+.product-list .product-img {width: 2.13rem; height: 2.13rem; margin-right: 0.26rem;}
+.product-list .product-img img {width: 100%; height: 100%; border-radius: 0.26rem;}
+.product-list .product-name {font-size: 0.42rem; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 2; display: -webkit-box}
+.product-list .product-price {font-size: 0.5rem; margin-right: 0.3rem;}
+.product-list .product-price em {font-size: 0.32rem;}
+
+#productinfo > .dialog-wrapper {align-items: flex-end}
+#productinfo > .dialog-wrapper > .dialog {width: 100%; height: calc(100% - 3.85rem); box-shadow: 0; padding-bottom: 1.3rem;}
+#productinfo .product-img {width: 2.13rem; height: 2.13rem; margin-right: 0.26rem;}
+#productinfo .product-img img {width: 100%; height: 100%; border-radius: 0.26rem;}
+#productinfo .product-name {font-size: 0.42rem; line-height: 1.5; overflow: hidden; text-overflow: ellipsis; -webkit-box-orient: vertical; -webkit-line-clamp: 2; display: -webkit-box}
+
+
+#productinfo .site-main {font-size: 0.4rem}
+#productinfo .order-email {margin: 0; margin-bottom: 0.43rem}
+#productinfo .product-memo {margin: 0; overflow-y: scroll}
+
+#productinfo .productinfo-btn {width: 100%; height: 1.3rem; position: absolute; bottom: 0; left: 0;}
+#productinfo .productinfo-btn input {width: 100%; height: 100%; font-size: 0.5rem; border: 0; cursor: pointer}
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+/*.products-category select {width: 100%; height: 1.06rem; background: #fff; border-radius: 0.106rem; padding: 0 0.3rem; border: 0.03rem solid #eee; font-size: 0.373rem; cursor: pointer}
+.products-category select::-ms-expand {display: none}隐藏IEx下 select默认的小箭头
+.products-category select {appearance: none; -webkit-appearance: none; -moz-appearance: none;-ms-appearance:none;}隐藏select默认的小箭头
+.products-category::after {content: "\e603"; font-size: 0.6rem; width: 0.8rem; height: 0.8rem; line-height: 0.8rem; text-align: center; position: absolute; top: 0.18rem; right: 0.5rem; z-index: 1}*/
+
+/*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+@media screen and (min-width: 768px) {
+/*	#page {width: 384px; min-height: 100%; height: auto; zoom: 200%}*/
+	
+}
+

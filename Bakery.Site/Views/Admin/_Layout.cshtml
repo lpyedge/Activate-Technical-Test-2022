@@ -1,0 +1,235 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <partial name="Widgets/_Header"/>
+    <title>@Bakery.Site.SiteContext.Config.SiteName</title>
+</head>
+<body>
+<div id="q-app">
+    <q-layout view="hHh lpR fFf" class="bg-grey-1">
+        <q-header elevated class="bg-primary q-py-xs" style="height: 65px;line-height: 65px;">
+            <q-toolbar class="fit">
+                <q-btn
+                    flat
+                    dense
+                    round
+                    class="on-left"
+                    @@click="leftDrawerOpen = !leftDrawerOpen"
+                    aria-label="Menu"
+                    size="lg"
+                    icon="menu">
+                </q-btn>
+
+                <img src="~/images/logo.png" alt="SiteContext.Config.SiteName" class="full-height"/>
+                <q-toolbar-title shrink class="desktop-only">
+                    @SiteContext.Config.SiteName
+                </q-toolbar-title>
+                <q-space></q-space>
+                <div class="q-gutter-sm row items-center no-wrap">
+                    <q-btn-dropdown class="on-right" flat >
+                        <template v-slot:label>
+                            <div class="text-capitalize text-subtitle1 text-weight-bold">
+                                {{ admin.account }}
+                            </div>
+                        </template>
+                        <q-list>
+                            <q-item clickable v-close-popup @@click="logoff">
+                                <q-item-section>
+                                    <q-item-label class="text-subtitle2">
+                                         <q-icon class="on-left" name="power_settings_new"></q-icon>Log Off
+                                    </q-item-label>
+                                </q-item-section>
+                            </q-item>
+                        </q-list>
+                    </q-btn-dropdown>
+                </div>
+            </q-toolbar>
+        </q-header>
+
+        <q-drawer
+            v-model="leftDrawerOpen"
+            show-if-above
+            bordered
+            content-class="bg-grey-2"
+            :width="240">
+            <q-scroll-area class="fit">
+                <q-list padding>
+                    <q-item-label header class="text-weight-bold text-uppercase">
+                        System
+                    </q-item-label>
+
+                    <q-item v-ripple clickable v-for="link in adminlinks" :key="link.text" @@click="Goto(link.url)">
+                        <q-item-section avatar>
+                            <q-icon color="grey-8" :name="link.icon"/>
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label class="text-h6 text-grey-8">{{ link.text }}</q-item-label>
+                        </q-item-section>
+                    </q-item>
+
+                    <q-separator class="q-my-sm"></q-separator>
+
+                    <q-item-label header class="text-weight-bold text-uppercase">
+                        Product
+                    </q-item-label>
+
+                    <q-item v-ripple clickable v-for="link in productlinks" :key="link.text" @@click="Goto(link.url)">
+                        <q-item-section avatar>
+                            <q-icon color="grey-8" :name="link.icon"/>
+                        </q-item-section>
+                        <q-item-section>
+                            <q-item-label class="text-h6 text-grey-8">{{ link.text }}</q-item-label>
+                        </q-item-section>
+                    </q-item>
+
+                </q-list>
+            </q-scroll-area>
+        </q-drawer>
+
+        <q-page-container>
+            @RenderBody()
+        </q-page-container>
+    </q-layout>
+</div>
+<partial name="Widgets/_BodyEnd"/>
+<script>
+
+    var _layout ={
+     el: '#q-app',
+     data : {
+       leftDrawerOpen: false,
+       admin : Store.Admin(),
+       adminlinks: [
+           { icon: 'settings', text: 'Global Settings',url:'@Url.ActionLink("Index", "Admin")'  },
+         ],
+       productlinks: [
+           { icon: 'fas fa-dolly', text: 'Product List',url:'@Url.ActionLink("Product_List", "Admin")' },
+         ]  ,
+         productIsShowOptions:[
+              { icon:'pause',name:'Hidden',color:'warning',value :false},
+              { icon:'play_circle_filled',name:'Display',color:'primary',value :true},
+          ],
+     },
+     beforeCreate(){
+         if(!Store.Token()){
+             location.href = '@Url.ActionLink("login", "admin")';
+         }
+     },
+    created(){
+         this.leftDrawerOpen=!!this.$q.platform.is.desktop;
+    },
+    computed:{
+         editorToolbar(){
+             return [
+                       [
+                         {
+                           label: this.$q.lang.editor.align,
+                           icon: this.$q.iconSet.editor.align,
+                           fixedLabel: true,
+                           options: ['left', 'center', 'right', 'justify']
+                         }
+                       ],
+                       ['bold', 'italic', 'strike', 'underline'],
+                       [ 'hr', 'link'],
+                       [
+                         {
+                           label: this.$q.lang.editor.fontSize,
+                           icon: this.$q.iconSet.editor.fontSize,
+                           fixedLabel: true,
+                           fixedIcon: true,
+                           list: 'no-icons',
+                           options: [
+                             'size-1',
+                             'size-2',
+                             'size-3',
+                             'size-4',
+                             'size-5',
+                             'size-6',
+                             'size-7'
+                           ]
+                         },
+                         {
+                           label: this.$q.lang.editor.defaultFont,
+                           icon: this.$q.iconSet.editor.font,
+                           fixedIcon: true,
+                           list: 'no-icons',
+                           options: [
+                             'default_font',
+                             'arial',
+                             'arial_black',
+                             'comic_sans',
+                             'courier_new',
+                             'impact',
+                             'lucida_grande',
+                             'times_new_roman',
+                             'verdana'
+                           ]
+                         }
+                       ],
+                         ['unordered', 'ordered'],
+                         ['removeFormat']
+                     ];
+         },
+         editorFonts(){
+             return {
+                      arial: 'Arial',
+                      arial_black: 'Arial Black',
+                      comic_sans: 'Comic Sans MS',
+                      courier_new: 'Courier New',
+                      impact: 'Impact',
+                      lucida_grande: 'Lucida Grande',
+                      times_new_roman: 'Times New Roman',
+                      verdana: 'Verdana'
+                    };
+         }
+    },
+     methods: {
+         logoff(){
+             Store.TokenRemove();
+             Store.AdminRemove();
+             location.href = '@Url.ActionLink("login","admin")';
+         }
+     }
+   };
+    
+    function DeepMerge(target, source) {
+        function DeepClone(source){
+            if (Object.prototype.toString.call(source) === "[object Date]") {
+                return  new Date(source.valueOf());
+            } else {
+                return source;
+            }
+         }
+         
+        if (Object.prototype.toString.call(target) === "[object Object]"
+         && Object.prototype.toString.call(source) === "[object Object]") {
+            for (var name in source){
+                if (Object.prototype.toString.call(source[name]) === "[object Object]"){
+                    if (target[name]){
+                        DeepMerge(target[name],source[name]);                        
+                    }else{
+                        target[name] = DeepClone(source[name]);
+                    }
+                }
+                // else if (Object.prototype.toString.call(source[name]) === "[object Function]"){
+                //     if (target[name]){
+                //        
+                //        var merge = target[name];
+                //        target[name] = (function () {
+                //            merge.call(this)
+                //            source[name].call(this)
+                //        })();
+                //     }else{
+                //        target[name] = DeepClone(source[name]);
+                //     }
+                // }
+                else{
+                    target[name] = DeepClone(source[name]);
+                }
+            }
+        } 
+    }
+</script>
+@RenderSection("Scripts", required: false)
+</body>
+</html>

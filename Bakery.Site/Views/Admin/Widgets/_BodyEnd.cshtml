@@ -1,0 +1,80 @@
+﻿<partial name="Widgets/_Plugin_Store" />
+
+<script>
+    window.quasarConfig = {
+        brand: { // this will NOT work on IE 11
+            primary: '#563d7c',
+            secondary: '#1976d2',
+            accent: '#26a69a',
+            warning:'#e7aa39'
+            // ... or all other brand colors
+        },
+        notify: {}, // default set of options for Notify Quasar plugin
+        loading: {}, // default set of options for Loading Quasar plugin
+        // loadingBar: { }, // settings for LoadingBar Quasar plugin
+        // ..and many more (check Installation card on each Quasar component/directive/plugin)
+    }
+</script>
+
+<script src="https://cdn.staticfile.org/lodash.js/4.17.21/lodash.min.js"
+    asp-fallback-test="window._"
+    asp-fallback-src="~/lib/lodash/lodash.min.js"></script>
+<script src="https://cdn.staticfile.org/axios/0.27.2/axios.min.js"
+        asp-fallback-test="window.axios"
+        asp-fallback-src="~/lib/axios/dist/axios.min.js"></script>
+<script src="https://gcore.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"
+        asp-fallback-test="window.Vue"
+        asp-fallback-src="~/lib/vue/dist/vue.min.js"></script>
+<script src="https://gcore.jsdelivr.net/npm/quasar@1.19.1/dist/quasar.umd.min.js"
+        asp-fallback-test="window.Quasar"
+        asp-fallback-src="~/lib/quasar/dist/quasar.umd.min.js"></script>
+
+<script>
+    
+    function AdminApi(action, data, postForm) {
+        if (postForm) {
+            var formData = new FormData();
+            for (name in data) {
+                formData.append(name, data[name]);
+            }
+            data = formData;
+        }
+        return axios({
+            'method': 'post',
+            'headers': {
+                'AdminToken': Store.Token()
+            },
+            'url': '/ApiAdmin/' + action,
+            'data': data
+        }
+        );
+    }
+
+    var Notify = {};
+    Notify.Warning = function (message) {
+        Quasar.Notify.create({
+            type: 'warning',
+            position: 'center',
+            icon: 'warning',
+            timeout: 2500,
+            message
+        });
+    }
+    Notify.Info = function (message) {
+        Quasar.Notify.create({
+            type: 'positive',
+            position: 'center',
+            icon: 'check_circle',
+            timeout: 1200,
+            message
+        });
+    }
+
+    function Goto(url, query) {
+        if (query) {
+            url += '?' + query;
+        }
+        location.href = url;
+    }
+
+</script>

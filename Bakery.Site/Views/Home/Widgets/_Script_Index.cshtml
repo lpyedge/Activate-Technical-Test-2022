@@ -1,0 +1,41 @@
+﻿<script src="https://cdn.staticfile.org/lodash.js/4.17.21/lodash.min.js"
+    asp-fallback-test="window._"
+    asp-fallback-src="~/lib/lodash/lodash.min.js"></script>
+<script>
+    var productlist =  @Json.Serialize(ViewBag.ProductList);
+    var product = productlist.length > 0 ? productlist[0] : null;
+
+    $(function () {
+        RenderSiteInfo();        
+        RenderProducts();
+    });
+
+    function RenderSiteInfo() {
+        $("#storename").html('@SiteContext.Config.SiteName');
+        $("#storememo").html('@SiteContext.Config.SiteMemo');
+        $("#storelogo").prop("src", '@SiteContext.Config.SiteLogo');
+    }
+
+    function GetProductModel(productid) {
+        if (productlist && productlist.length > 0) {
+            for (var i = 0; i < productlist.length; i++) {
+                if (productlist[i].id == productid) {
+                    return productlist[i];
+                }
+            }
+        }
+        return null;
+    }
+
+
+
+    function RenderProductInfo() {
+        if (product) {
+            $("#ProductName").text(product.name);
+            $("#ProductIcon").prop("src", product.icon);
+            $("#ProductPrice").html('$' + product.price.Format0(2));
+            $("#ProductMemo").html(product.memo);
+        }
+    }
+
+</script>

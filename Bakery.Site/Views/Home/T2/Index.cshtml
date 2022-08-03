@@ -1,0 +1,143 @@
+﻿<!doctype html>
+<html>
+<head>
+    <partial name="Widgets/_Header" />
+    <style>
+        /* CSS Document t4 */
+        .site-header {background-image: linear-gradient(135deg, #42189f, #a23078, #ee2e3d)}/*商城头部总框架颜色*/
+        .site-header .site-logo {width: 2.4rem; height: 2.4rem}/*商城头部图标框架尺寸*/
+        .site-header .site-logo img {width: 100%; height: 100%; border: 0.06rem solid #fff}/*商城头部图标尺寸，边框颜色*/
+        .site-header .site-name {font-size: 0.6rem}/*商城头部名称大小*/
+        .site-header .site-memo {font-size: 0.3rem; color: rgba(255,255,255,.6); -webkit-line-clamp: 3}/*商城头部介绍大小，颜色，行数*/
+        .site-header .bottom-nav {width: 100%; background: #f5f5f5; left: 0}/*商城头部下方定位背景色*/
+        
+        .site-main {width: 100%; min-height: 65%; margin: 0; padding: 0; margin-top: 0.43rem; padding-top: 0.43rem}/*主框架背景色及圆角*/
+        
+        .product-memo {color: #999}/*商品信息文字颜色*/
+        
+        .site-footer > input {background-image: linear-gradient(#ee2e3d, #b8111e); color: #fff}/*店铺页脚按钮背景色及文字色*/
+        
+        /*---------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+        
+        .product-list ul li {background: #fff}/*商品列表单元背景色*/
+        .product-list .product-price {color: #ee2e3d}/*商品列表商品价格颜色*/
+        
+        #productinfo .site-main {border-top: 0.0285rem solid #eee}/*商品窗口结算界面上划线颜色*/
+        #productinfo .productinfo-btn input {color: #fff}/*商品窗口按钮文字颜色*/
+        #productinfo .productinfo-btn .submit {background-image: linear-gradient(#ee2e3d, #b8111e)}/*商品窗口按钮文字颜色-提交*/
+        #productinfo .productinfo-btn .close {background-image: linear-gradient(#353535, #141414)}/*商品窗口按钮文字颜色-取消*/
+        
+        /*商品列表适应性二次重组*/
+        .product-list ul li {float: left; width: calc((100% - 0.86rem) / 3); margin-right: 0.43rem;}
+        .product-list ul li:nth-child(3n) {margin-right: 0;}
+        .product-list .product-img img {width: 2.15rem; height: 2.15rem;}
+        .product-list .product-name {font-size: 0.37rem}
+        .product-list .product-price {font-size: 0.42rem}
+
+    </style>
+</head>
+
+<body>
+    <div id="page">
+        <div class="site-header row items-center">
+            <div class="row">
+                <div class="site-logo">
+                    <img id="storelogo">
+                </div>
+                <div class="site-text txt-white col">
+                    <div class="site-name" id="storename"></div>
+                    <div class="site-memo" id="storememo"></div>
+                </div>
+            </div>
+            <div class="bottom-nav"></div>
+        </div>
+        <div class="product-list" id="productlist">
+        </div>
+    </div>
+
+    <div class="dialog-box" id="productinfo" style="display:none">
+        <div class="dialog-wrapper">
+            <div class="dialog">
+                <div class="content column">
+                    <div class="row">
+                        <div class="product-img">
+                            <img id="ProductIcon">
+                        </div>
+                        <div class="product-text col column">
+                            <div class="product-name col-auto" id="ProductName"></div>
+                            <div class="col flex items-end">
+                                <span class="product-price" id="ProductPrice">
+                                    <em>$</em>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="site-main col column">
+                        <div class="product-memo col" id="ProductMemo">
+                            empty
+                        </div>
+                    </div>
+                    <div class="productinfo-btn row ">
+                        <div class="col">
+                            <input type="button" value="Close" class="close dialog-close" onclick="$('#productinfo').hide();">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <partial name="Widgets/_Script_Index" />
+    <script>
+        class ProductItem extends React.Component {
+            constructor(props) {
+                super(props);
+            }
+        
+            render() {
+                var res = [];    
+                for (var i =0;i<this.props.children.length;i++){   
+                    let oDiv1 =React.createElement('div',{className:'product-img'},
+                        React.createElement('img',{src:this.props.children[i].icon},null)
+                     );     
+                    let oDiv2 =React.createElement('div',{className:'product-text col column'}, 
+                        React.createElement('div',{className:'product-name col-auto'}, this.props.children[i].name),
+                        React.createElement('div',{className:'col flex items-end'}, 
+                            // <span class="product-price"><em>$</em>{{=it[i].price}}</span>
+                            React.createElement('span',{className:'product-price'},
+                                React.createElement('em', null, "$") ,
+                             this.props.children[i].price)
+                        )
+                    );
+                    // 注意点: 如果想通过React绑定事件, 那么事件名称必须是驼峰命名
+                    let oLi = React.createElement('li', { className:'row', onClick:(function(_this,i){
+                         return function(e) {
+                            productClicked(_this.props.children[i].id);
+                         }
+                       }(this,i))
+                    }, oDiv1, oDiv2);
+                    res.push(oLi);
+                }
+
+                return React.createElement('ul', null , res );
+            }
+        }
+
+        function productClicked(productid){
+            product = GetProductModel(productid);
+            if (product){
+                $("#productinfo").show();
+                RenderProductInfo();
+            }else{
+                $("#productinfo").hide();
+            }
+        }
+        
+        function RenderProducts() {
+            if (productlist && productlist.length > 0) {
+                ReactDOM.render(React.createElement(ProductItem,null,productlist),document.querySelector('#productlist'));
+            }            
+        }
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,80 @@
+{
+    "version": "1.0",
+    "defaultProvider": "cdnjs",
+    "libraries": [
+        {
+            "provider": "jsdelivr",
+            "library": "lodash@4.17.21",
+            "destination": "wwwroot/lib/lodash/",
+            "files": [
+                "lodash.min.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "axios@0.27.2",
+            "destination": "wwwroot/lib/axios/",
+            "files": [
+                "dist/axios.min.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "vue@2.6.14",
+            "destination": "wwwroot/lib/vue/",
+            "files": [
+                "dist/vue.min.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "quasar@1.19.1",
+            "destination": "wwwroot/lib/quasar/",
+            "files": [
+                "dist/quasar.min.css",
+                "dist/quasar.umd.min.js",
+                "dist/lang/zh-hans.umd.min.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "animate.css@4.1.1",
+            "destination": "wwwroot/lib/animate.css/",
+            "files": [
+                "animate.min.css"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "dayjs@1.11.2",
+            "destination": "wwwroot/lib/dayjs/",
+            "files": [
+                "dayjs.min.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "jquery@3.6.0",
+            "destination": "wwwroot/lib/jquery/",
+            "files": [
+                "dist/jquery.min.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "react@18.2.0",
+            "destination": "wwwroot/lib/react/",
+            "files": [
+                "umd/react.production.min.js"
+            ]
+        },
+        {
+            "provider": "jsdelivr",
+            "library": "react-dom@18.2.0",
+            "destination": "wwwroot/lib/react-dom/",
+            "files": [
+                "umd/react-dom.production.min.js"
+            ]
+        }
+    ]
+}

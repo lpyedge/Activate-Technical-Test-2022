@@ -1,0 +1,27 @@
+﻿<script>
+var Store = {};
+Store.Token = function (token) {
+    if (token) {
+        localStorage.setItem("AdminToken", JSON.stringify(token));
+    } else {
+        return JSON.parse(localStorage.getItem("AdminToken"));
+    }
+};
+
+Store.TokenRemove = function () {
+    localStorage.removeItem("AdminToken");
+};
+
+//管理员
+Store.Admin = function (user) {
+    if (user) {
+        localStorage.setItem("Admin", JSON.stringify(user));
+    } else {
+        return JSON.parse(localStorage.getItem("Admin"));
+    }
+};
+Store.AdminRemove = function () {
+    localStorage.removeItem("Admin");
+};
+
+</script>
